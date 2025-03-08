@@ -1,10 +1,9 @@
-
-#include "camera.h"
+#include "zf_common_headfile.h"
 uint8 image_copy[MT9V03X_H][MT9V03X_W];
 int center_x_offset; // 在中心线左为负数
 int center_y_diff;
 IfxCpu_mutexLock camera_mutex;
-int count__ = 0;
+
 void draw_center_line(uint8 *image)
 {
     for (int y = 0; y < MT9V03X_H; y++)
@@ -161,11 +160,13 @@ void find_regions(uint8 *image)
                     system_delay_ms(1);
                 }
                 center_x_offset = (x1 + x2) / 2.0 - center_x_set;
-                // 访问资源
-                IfxCpu_releaseMutex(&camera_mutex);
                 center_y_diff = abs(y1 - y2);
-                // seekfree_assistant_oscilloscope_data.data[0] = center_x_offset;
-                // seekfree_assistant_oscilloscope_data.data[1] = center_y_diff;
+                // 访问资源
+            
+             
+                seekfree_assistant_oscilloscope_data.data[0] = center_x_offset;
+                seekfree_assistant_oscilloscope_data.data[1] = center_y_diff;
+                IfxCpu_releaseMutex(&camera_mutex);
                 // seekfree_assistant_oscilloscope_data.data[2] =seekfree_assistant_parameter[2];
                 // seekfree_assistant_oscilloscope_data.data[3] =seekfree_assistant_parameter[3];
                 //    detector_oscilloscope_data.data[4] = 10;
@@ -174,17 +175,17 @@ void find_regions(uint8 *image)
                 //    detector_oscilloscope_data.data[7] = 10000;
 
                 // 设置本次需要发送几个通道的数据
-                // seekfree_assistant_oscilloscope_data.channel_num = 2;
+                seekfree_assistant_oscilloscope_data.channel_num = 2;
 
                 // 这里进发送了4个通道的数据，最大支持8通道
-                // seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
+                seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
             }
         }
     }
 }
 void camera_related_init(void)
 {
-    gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL); // 初始化 LED1 输出 默认高电平 推挽输出模式
+    // gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL); // 初始化 LED1 输出 默认高电平 推挽输出模式
     ips200_init(IPS200_TYPE);
     ips200_show_string(0, 0, "mt9v03x init.");
     while (1)
@@ -210,8 +211,6 @@ void camera_run(void)
         binarize_image(image_copy);
         // 2. 寻找所有白色区域，并计算中心点
         find_regions(image_copy);
-        count__++;
-        printf("count: %d\n", count__);
         draw_center_line(image_copy);
         ips200_displayimage03x((uint8 *)image_copy, MT9V03X_W, MT9V03X_H); // 显示图像
         mt9v03x_finish_flag = 0;

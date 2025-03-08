@@ -1,5 +1,3 @@
-
-#include "camera.h"
 #include "zf_common_headfile.h"
 #pragma section all "cpu1_dsram"
 
