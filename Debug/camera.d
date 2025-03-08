@@ -322,3 +322,5 @@ camera.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\librari
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 camera.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+camera.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h"
+"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h" :

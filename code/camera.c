@@ -3,7 +3,7 @@
 uint8 image_copy[MT9V03X_H][MT9V03X_W];
 int center_x_offset; // 在中心线左为负数
 int center_y_diff;
-
+IfxCpu_mutexLock camera_mutex;
 void draw_center_line(uint8 *image)
 {
     for (int y = 0; y < MT9V03X_H; y++)
@@ -100,7 +100,7 @@ void bfs(uint8 *image, int start_x, int start_y, int *sum_x, int *sum_y, int *co
     int width = max_x - min_x;
     int height = max_y - min_y;
 
-    if (width > height * shape_threshold || height > width *shape_threshold)
+    if (width > height * shape_threshold || height > width * shape_threshold)
     {
         *count = 0; // 直接标记此区域为无效
     }
@@ -144,7 +144,7 @@ void find_regions(uint8 *image)
 
             int count1 = center_raw[i * 3 + 2];
             int count2 = center_raw[j * 3 + 2];
-            if (abs(x1 - x2) < x_threshold&&count1<count_threshold*count2&&count2<count_threshold*count1)
+            if (abs(x1 - x2) < x_threshold && count1 < count_threshold * count2 && count2 < count_threshold * count1)
             {
                 int y1 = center_raw[i * 3 + 1];
                 int r1 = center_raw[i * 3 + 2];
@@ -154,11 +154,17 @@ void find_regions(uint8 *image)
 
                 draw_box(image, x1, y1, r1);
                 draw_box(image, x2, y2, r2);
-                printf("Drawing box for (%d, %d) and (%d, %d)\n", x1, y1, x2, y2);
+                // printf("Drawing box for (%d, %d) and (%d, %d)\n", x1, y1, x2, y2);
+                while (!IfxCpu_acquireMutex(&camera_mutex))
+                {
+                    system_delay_ms(1);
+                }
                 center_x_offset = (x1 + x2) / 2.0 - center_x_set;
+                // 访问资源
+                IfxCpu_releaseMutex(&camera_mutex);
                 center_y_diff = abs(y1 - y2);
-                seekfree_assistant_oscilloscope_data.data[0] = center_x_offset;
-                seekfree_assistant_oscilloscope_data.data[1] = center_y_diff;
+                // seekfree_assistant_oscilloscope_data.data[0] = center_x_offset;
+                // seekfree_assistant_oscilloscope_data.data[1] = center_y_diff;
                 // seekfree_assistant_oscilloscope_data.data[2] =seekfree_assistant_parameter[2];
                 // seekfree_assistant_oscilloscope_data.data[3] =seekfree_assistant_parameter[3];
                 //    detector_oscilloscope_data.data[4] = 10;
@@ -167,10 +173,10 @@ void find_regions(uint8 *image)
                 //    detector_oscilloscope_data.data[7] = 10000;
 
                 // 设置本次需要发送几个通道的数据
-                seekfree_assistant_oscilloscope_data.channel_num = 2;
+                // seekfree_assistant_oscilloscope_data.channel_num = 2;
 
                 // 这里进发送了4个通道的数据，最大支持8通道
-                seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
+                // seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
             }
         }
     }

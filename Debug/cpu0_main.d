@@ -324,3 +324,5 @@ cpu0_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\code
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\code\camera.h" :
 cpu0_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+cpu0_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h"
+"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h" :

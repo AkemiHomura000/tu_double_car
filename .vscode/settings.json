@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "zf_common_headfile.h": "c",
+        "ifxcpu.h": "c",
+        "camera.h": "c"
+    }
+}

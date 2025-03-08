@@ -1,5 +1,7 @@
 cpu1_main.o :	../user/cpu1_main.c
 ../user/cpu1_main.c :
+cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\code\camera.h"
+"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\code\camera.h" :
 cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 cpu1_main.o :	"C:\software\Infineon\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\math.h"
@@ -320,3 +322,7 @@ cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libr
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h"
+"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC37A\\Tricore\\Cpu\\Std\IfxCpu.h" :
+cpu1_main.o :	"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"C:\\project\\TU\\program\\Seekfree_TC377_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
