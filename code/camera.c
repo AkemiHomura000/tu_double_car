@@ -4,6 +4,7 @@ uint8 image_copy[MT9V03X_H][MT9V03X_W];
 int center_x_offset; // 在中心线左为负数
 int center_y_diff;
 IfxCpu_mutexLock camera_mutex;
+int count__ = 0;
 void draw_center_line(uint8 *image)
 {
     for (int y = 0; y < MT9V03X_H; y++)
@@ -209,6 +210,8 @@ void camera_run(void)
         binarize_image(image_copy);
         // 2. 寻找所有白色区域，并计算中心点
         find_regions(image_copy);
+        count__++;
+        printf("count: %d\n", count__);
         draw_center_line(image_copy);
         ips200_displayimage03x((uint8 *)image_copy, MT9V03X_W, MT9V03X_H); // 显示图像
         mt9v03x_finish_flag = 0;

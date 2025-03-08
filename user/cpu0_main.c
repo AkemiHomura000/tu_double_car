@@ -21,7 +21,7 @@ int core0_main(void)
             center =center_x_offset;
             IfxCpu_releaseMutex(&camera_mutex);
         }
-        printf("%d \n", center);
+        // printf("%d \n", center);
         // 此处编写需要循环执行的代码
         system_delay_ms(10);
     }

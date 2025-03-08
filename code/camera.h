@@ -21,6 +21,7 @@ extern uint8 image_copy[MT9V03X_H][MT9V03X_W];
 extern int center_x_offset; // 在中心线左为负数
 extern int center_y_diff;   // 绝对值
 extern IfxCpu_mutexLock camera_mutex;
+extern int count__;
 
 void draw_center_line(uint8 *image);
 void binarize_image(uint8 *image);
