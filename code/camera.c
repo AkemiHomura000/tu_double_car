@@ -1,7 +1,7 @@
 #include "zf_common_headfile.h"
 uint8 image_copy[MT9V03X_H][MT9V03X_W];
-int center_x_offset; // 在中心线左为负数
-int center_y_diff;
+float center_x_offset; // 在中心线左为负数
+float center_y_diff;
 IfxCpu_mutexLock camera_mutex;
 
 void draw_center_line(uint8 *image)
@@ -160,7 +160,7 @@ void find_regions(uint8 *image)
                     system_delay_ms(1);
                 }
                 center_x_offset = (x1 + x2) / 2.0 - center_x_set;
-                center_y_diff = abs(y1 - y2);
+                center_y_diff = (float)abs(y1 - y2);
                 // 访问资源
             
              
@@ -208,10 +208,10 @@ void camera_run(void)
         memcpy(image_copy[0], mt9v03x_image[0], MT9V03X_IMAGE_SIZE);
 
         // 1. 先二值化图像
-        binarize_image(image_copy);
+        binarize_image(image_copy[0]);
         // 2. 寻找所有白色区域，并计算中心点
-        find_regions(image_copy);
-        draw_center_line(image_copy);
+        find_regions(image_copy[0]);
+        draw_center_line(image_copy[0]);
         ips200_displayimage03x((uint8 *)image_copy, MT9V03X_W, MT9V03X_H); // 显示图像
         mt9v03x_finish_flag = 0;
     }

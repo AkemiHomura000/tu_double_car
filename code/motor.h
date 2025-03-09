@@ -22,7 +22,6 @@
 void motor_init(void);
 void straight_drive(int speed);
 void general_drive(int speed, int steer);
-void encoder_init(void);
 
 
 

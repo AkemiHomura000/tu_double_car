@@ -1,5 +1,5 @@
 #include "pid.h"
-
+#include "math.h"
 // ³£¹æPID
 float pid_solve(pid_param_t *pid, float error) {
     pid->out_d = (error - pid->out_p) * pid->low_pass + pid->out_d * (1 - pid->low_pass);

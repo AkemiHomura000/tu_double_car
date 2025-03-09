@@ -15,7 +15,7 @@
 #define steering_pwm ATOM1_CH1_P33_9
 
 #define steering_middle 730//范围805左--730--650右
-
+static void encoder_init(void);
 //包括驱动和舵机
 void motor_init(void)
 {

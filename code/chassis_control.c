@@ -1,5 +1,5 @@
 #include "zf_common_headfile.h"
-int center_x, center_y;
+float center_x, center_y;
 static pid_param_t liner_vel_pid = PID_CREATE(1.0, 1.0, 0.2, 0.1, 4.0, 3, 9.0); // 直线速度环
 static pid_param_t angel_pid = PID_CREATE(1.0, 1.0, 0.2, 0.1, 4.0, 3, 9.0);     // 角度环
 
