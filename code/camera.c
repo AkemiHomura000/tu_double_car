@@ -178,7 +178,7 @@ void find_regions(uint8 *image)
                 seekfree_assistant_oscilloscope_data.channel_num = 2;
 
                 // 这里进发送了4个通道的数据，最大支持8通道
-                seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
+                // seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
             }
         }
     }
