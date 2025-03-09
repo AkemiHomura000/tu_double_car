@@ -20,6 +20,8 @@
 extern uint8 image_copy[MT9V03X_H][MT9V03X_W];
 extern int center_x_offset; // 在中心线左为负数
 extern int center_y_diff;   // 绝对值
+static int untracked_count = 0;
+extern bool led_tracked; // 是否追踪到灯条
 extern IfxCpu_mutexLock camera_mutex;
 
 void draw_center_line(uint8 *image);

@@ -2,6 +2,7 @@
 uint8 image_copy[MT9V03X_H][MT9V03X_W];
 int center_x_offset; // 在中心线左为负数
 int center_y_diff;
+bool led_tracked = false; // 是否追踪到灯条
 IfxCpu_mutexLock camera_mutex;
 
 void draw_center_line(uint8 *image)
@@ -137,6 +138,7 @@ void find_regions(uint8 *image)
     }
     for (int i = 0; i < region_num; i++)
     {
+        bool valid = false;
         for (int j = i + 1; j < region_num; j++)
         {
             int x1 = center_raw[i * 3];
@@ -146,6 +148,7 @@ void find_regions(uint8 *image)
             int count2 = center_raw[j * 3 + 2];
             if (abs(x1 - x2) < x_threshold && count1 < count_threshold * count2 && count2 < count_threshold * count1)
             {
+                valid = true;
                 int y1 = center_raw[i * 3 + 1];
                 int r1 = center_raw[i * 3 + 2];
 
@@ -161,12 +164,11 @@ void find_regions(uint8 *image)
                 }
                 center_x_offset = (x1 + x2) / 2.0 - center_x_set;
                 center_y_diff = abs(y1 - y2);
-                // 访问资源
-            
-             
+                led_tracked = true;
                 seekfree_assistant_oscilloscope_data.data[0] = center_x_offset;
                 seekfree_assistant_oscilloscope_data.data[1] = center_y_diff;
                 IfxCpu_releaseMutex(&camera_mutex);
+                untracked_count = 0;
                 // seekfree_assistant_oscilloscope_data.data[2] =seekfree_assistant_parameter[2];
                 // seekfree_assistant_oscilloscope_data.data[3] =seekfree_assistant_parameter[3];
                 //    detector_oscilloscope_data.data[4] = 10;
@@ -179,6 +181,20 @@ void find_regions(uint8 *image)
 
                 // 这里进发送了4个通道的数据，最大支持8通道
                 // seekfree_assistant_oscilloscope_send(&seekfree_assistant_oscilloscope_data);
+            }
+        }
+        if (!valid)
+        {
+            untracked_count++;
+            if (untracked_count > 5)
+            {
+                while (!IfxCpu_acquireMutex(&camera_mutex))
+                {
+                    system_delay_ms(1);
+                }
+                led_tracked = false;
+                IfxCpu_releaseMutex(&camera_mutex);
+                untracked_count = 100;
             }
         }
     }
