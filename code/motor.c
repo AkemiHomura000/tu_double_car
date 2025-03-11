@@ -43,8 +43,20 @@ void general_drive(int speed, int steer)
     if(steer > steering_lmax) steer = steering_lmax;
     if(steer < steering_rmax) steer = steering_rmax;
     pwm_set_duty(steering_pwm, steer);
-    pwm_set_duty(left_wheel_pwm, speed);
-    pwm_set_duty(right_wheel_pwm, speed);
+    if(speed > 0)
+    {
+        gpio_set_level(left_wheel_dir, 1);
+        gpio_set_level(right_wheel_dir, 1);
+        pwm_set_duty(left_wheel_pwm, speed);
+        pwm_set_duty(right_wheel_pwm, speed);
+    }
+    else
+    {
+        gpio_set_level(left_wheel_dir, 0);
+        gpio_set_level(right_wheel_dir, 0);
+        pwm_set_duty(left_wheel_pwm, -speed);
+        pwm_set_duty(right_wheel_pwm, -speed);
+    }
 }
 
 static void encoder_init(void)
