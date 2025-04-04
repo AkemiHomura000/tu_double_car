@@ -2,7 +2,7 @@
 #define TU_CAMERA_H
 #include "zf_common_headfile.h"
 #include "IfxCpu.h"
-
+///test
 #define LED1 (P33_9) // Çý¶¯ºìÍâµÆ
 #define IPS200_TYPE (IPS200_TYPE_SPI)
 #define M_PI 3.1415926
