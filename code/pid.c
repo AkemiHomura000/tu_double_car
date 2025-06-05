@@ -70,3 +70,24 @@ float bangbang_pid_solve(pid_param_t *pid, float error) {
 
     return bangbang_out;
 }
+void PID_Init_Add(PID_Datatypedef *sptr)
+{
+    sptr->P = 0;         // 初始化比例系数
+    sptr->I = 0;         // 初始化积分系数
+    sptr->D = 0;         // 初始化微分系数
+    sptr->LastError = 0; // 初始化上一次误差
+    sptr->PrevError = 0; // 初始化上上次误差
+}
+float MotorPID_Output_Add(PID_Datatypedef *sptr, float NowSpeed, float ExpectSpeed)
+{
+    float Increase; // PID 输出增量
+    float iError;   // 当前误差
+    iError = ExpectSpeed - NowSpeed;
+    Increase = sptr->P * (iError - sptr->LastError) + sptr->I * iError + sptr->D * (iError - 2.0f * sptr->LastError + sptr->PrevError);
+
+    // 更新误差历史
+    sptr->PrevError = sptr->LastError;
+    sptr->LastError = iError;
+
+    return Increase;
+}

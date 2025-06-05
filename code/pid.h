@@ -23,7 +23,16 @@ typedef struct {
     float pre_error;
     float pre_pre_error;
 } pid_param_t;
+typedef struct
+{
+        float P;
+        float I;
+        float D;
 
+        float LastError;
+        float PrevError;
+
+} PID_Datatypedef;
 #define PID_CREATE(_kp, _ki, _kd, _low_pass, max_p, max_i, max_d) \
     {                                    \
         .kp = _kp,                       \
@@ -47,5 +56,7 @@ float bangbang_pid_solve(pid_param_t *pid, float error);
 
 float changable_pid_solve(pid_param_t *pid, float error);
 
+void PID_Init_Add(PID_Datatypedef *sptr);
+float MotorPID_Output_Add(PID_Datatypedef *sptr, float NowSpeed, float ExpectSpeed);
 
 #endif

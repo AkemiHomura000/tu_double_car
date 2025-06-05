@@ -14,16 +14,16 @@
 #define right_wheel_dir P21_4
 #define steering_pwm ATOM1_CH1_P33_9
 
-#define steering_middle 730//·¶Î§805×ó--730--650ÓÒ
+#define steering_middle 730 // ·¶Î§805×ó--730--650ÓÒ
 #define steering_lmax 805
 #define steering_rmax 650
 #define speed_max 4000
-
+extern float speed_l;
+extern float speed_r; // ×óÓÒÂÖËÙ¶È
+void encoder_Read(void);
 void motor_init(void);
-void straight_drive(int speed);
-void general_drive(int speed, int steer);
+void straight_drive(int speed_l, int speed_r);
+void general_drive(int speed_l, int speed_r, int steer);
 void encoder_init(void);
-
-
 
 #endif /* CODE_MOTOR_H_ */

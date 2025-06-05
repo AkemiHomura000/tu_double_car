@@ -2,7 +2,8 @@
     "files.associations": {
         "zf_common_headfile.h": "c",
         "ifxcpu.h": "c",
-        "camera.h": "c"
+        "camera.h": "c",
+        "chassis_control.h": "c"
     },
     "C_Cpp.default.compilerPath": "C:/software/msys64/ucrt64/bin/gcc.exe"
 }

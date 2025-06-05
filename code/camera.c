@@ -202,12 +202,14 @@ void find_regions(uint8 *image)
 void camera_related_init(void)
 {
     // gpio_init(LED1, GPO, GPIO_HIGH, GPO_PUSH_PULL); // 初始化 LED1 输出 默认高电平 推挽输出模式
+    printf("init");
     ips200_init(IPS200_TYPE);
     ips200_show_string(0, 0, "mt9v03x init.");
     while (1)
     {
         if (mt9v03x_init())
-            ips200_show_string(0, 80, "mt9v03x reinit.");
+            {printf("reinit \n");
+            ips200_show_string(0, 80, "mt9v03x reinit.");}
         else
             break;
         system_delay_ms(500); // 短延时快速闪灯表示异常
