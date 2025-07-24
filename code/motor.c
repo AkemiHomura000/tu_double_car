@@ -13,7 +13,7 @@
 #define right_wheel_dir P21_4
 #define steering_pwm ATOM1_CH1_P33_9
 
-#define steering_middle 730 // ·¶Î§805×ó--730--650ÓÒ
+#define steering_middle 815 // ·¶Î§885×ó--815--740ÓÒ
 
 #define PIT_60_0_PERIOD 10    // 10ms ±àÂëÆ÷
 #define ENCODER_LINE_NUM 2340 //  È·¶¨±àÂëÆ÷ÏßÊý
@@ -61,10 +61,10 @@ void general_drive(int speed_l, int speed_r, int steer)
         speed_l = speed_max;
     if (speed_r > speed_max)
         speed_r = speed_max;
-    // if (steer > steering_lmax)
-    //     steer = steering_lmax;
-    // if (steer < steering_rmax)
-    //     steer = steering_rmax;
+    if (steer > steering_lmax)
+        steer = steering_lmax;
+    if (steer < steering_rmax)
+        steer = steering_rmax;
     pwm_set_duty(steering_pwm, steer);
     if (speed_l > 0)
     {

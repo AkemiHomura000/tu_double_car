@@ -6,28 +6,28 @@ float set_line_speed = 70.0;                       // 设定线速度
 int delta_y = 30;                                  // 设定偏移量
 int y_offset_ = 0;                                 // 偏移量
 int center_x, center_y;
-int angle_yaw = 730;
-bool caemra_tracked = false;
+int angle_yaw = 815;
+bool camera_tracked = false;
 static pid_param_t liner_vel_pid = PID_CREATE(1.0, 1.0, 0.2, 0.1, 7.0, 3, 9.0); // 直线速度环
 PID_Datatypedef l_liner_vel_pid, r_liner_vel_pid, delta_vel_pid;                // 直线速度环
 #define PWM_PID_P 16.0
 #define PWM_PID_I 2.0
 #define PWM_PID_D 20.0
 #define DELTA_VEL_KP 0.2
-#define DELTA_VEL_KI 1.5
+#define DELTA_VEL_KI 2.5
 #define DELTA_VEL_KD 0.0
 int16 pwm_r = 750;                                                          // 右电机PWM值
 int16 pwm_l = 750;                                                          // 左电机PWM值
 static pid_param_t angel_pid = PID_CREATE(1.0, 1.0, 0.2, 0.1, 4.0, 3, 9.0); // 角度环
 
 #define SWITCH2 (P33_12)
-void update_camera_data(void)
+void update_camera_data(void) //更新灯条识别状态
 {
     if (IfxCpu_acquireMutex(&camera_mutex))
     {
         center_x = center_x_offset;
         center_y = center_y_diff;
-        caemra_tracked = led_tracked;
+        camera_tracked = led_tracked;
         IfxCpu_releaseMutex(&camera_mutex);
     }
 }
@@ -45,22 +45,21 @@ void straight_follow(void)
 }
 int angel_mapping(float angel)
 {
-    float k = 0.6;
-    int reslut = (int)(730 - angel * k);
-    if (reslut > 805)
-        reslut = 805;
-    if (reslut < 650)
-        reslut = 650;
+    float k = 1.6;
+    int reslut = (int)(815 - angel * k);
+    if (reslut > 885)
+        reslut = 885;
+    if (reslut < 740)
+        reslut = 740;
     return reslut;
 }
 void gengeral_follow(void)
 {
     update_camera_data();
     bool switch2 = gpio_get_level(SWITCH2); // 获取开关状态
-    pwm_set_duty(steering_pwm, steering_middle);
-    if (!switch2)
+    if (!switch2 && camera_tracked == 1)
     {
-        float target_speed = set_line_speed;
+        float target_speed = 70.0;
         static bool initialized = false; // 只在第一次进入时为 false
         if (!initialized)
         {
@@ -81,19 +80,21 @@ void gengeral_follow(void)
         }
         if (IfxCpu_acquireMutex(&param_mutex))
         {
+            target_speed = set_line_speed;
             // l_liner_vel_pid.P = line_kp;
             // l_liner_vel_pid.I = line_ki;
             // l_liner_vel_pid.D = line_kd;
             // r_liner_vel_pid.P = l_liner_vel_pid.P;
             // r_liner_vel_pid.I = l_liner_vel_pid.I;
             // r_liner_vel_pid.D = l_liner_vel_pid.D;
-            delta_vel_pid.P = line_kd;
-            delta_vel_pid.I = line_ki;
-            delta_vel_pid.D = line_kp;
-            y_offset_ = delta_y;
+            // delta_vel_pid.P = line_kd;
+            // delta_vel_pid.I = line_ki;
+            // delta_vel_pid.D = line_kp;
+            // y_offset_ = delta_y;
             IfxCpu_releaseMutex(&param_mutex);
         }
-        float delta_liner_vel = MotorPID_Output_Add(&delta_vel_pid, y_offset_, 30.0); // 计算线速度环输出
+        float delta_liner_vel = MotorPID_Output_Add(&delta_vel_pid, center_y, 25.0); // 计算线速度环输出
+        target_speed += delta_liner_vel;                                             // 目标速度加上偏移量
         int16 pwm_line_add_l = (int)MotorPID_Output_Add(&l_liner_vel_pid, speed_l, target_speed);
         int16 pwm_line_add_r = (int)MotorPID_Output_Add(&r_liner_vel_pid, speed_r, target_speed);
         // 更新PWM值
@@ -110,21 +111,19 @@ void gengeral_follow(void)
         oscilloscope_data.data[3] = pwm_l;
         oscilloscope_data.data[4] = pwm_r;
         oscilloscope_data.data[5] = delta_liner_vel;
-        oscilloscope_data.data[6] = angle_yaw;
+        oscilloscope_data.data[6] = center_y;
         oscilloscope_data.channel_num = 7;
         seekfree_assistant_oscilloscope_send(&oscilloscope_data);
 
-        if (angle_yaw > 900)
-            angle_yaw = 900;
-        if (angle_yaw < 550)
-            angle_yaw = 550;
-        general_drive(pwm_l, pwm_r, angle_yaw);
+        float angel_control = pid_solve(&angel_pid, center_x);
+        int angel_control_int = angel_mapping(angel_control);
+        general_drive(pwm_l, pwm_r, angel_control_int);
     }
     else
     {
-        general_drive(0, 0, 730);
+        general_drive(0, 0, steering_middle);
     }
-    // if (!caemra_tracked)
+    // if (!camera_tracked)
     // {
     //     float delta_liner_vel = pid_solve(&liner_vel_pid, 30 - center_y) * 50;
 

@@ -14,9 +14,9 @@
 #define right_wheel_dir P21_4
 #define steering_pwm ATOM1_CH1_P33_9
 
-#define steering_middle 730 // ·¶Î§805×ó--730--650ÓÒ
-#define steering_lmax 805
-#define steering_rmax 650
+#define steering_middle 815 // ·¶Î§805×ó--730--650ÓÒ
+#define steering_lmax 885
+#define steering_rmax 740
 #define speed_max 4000
 extern float speed_l;
 extern float speed_r; // ×óÓÒÂÖËÙ¶È
